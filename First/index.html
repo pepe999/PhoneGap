@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PhoneGap aplikace</title>
+  <meta name="viewport" content="width=device-width,height=device-height initial-scale=1.0,maximum-scale=1.0, user-scalable=no;" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+  <script type="text/javascript">
+    var deviceReady = false;
+    var infoContent;
+    
+    function onLoad() {
+      document.addEventListener("deviceready", onDeviceReady, false);
+    }
+    
+    function onDeviceReady() {
+      alert("Zařízení je připraveno!");
+      infoContainer = document.getElementById("infoContainer");
+      deviceReady = true;
+      
+      getDeviceInfo();
+    }
+    
+    function getDeviceInfo() {
+      infoContent = '';
+    
+      if (device.name) {
+	infoContent += '<b>Název</b>: ' + device.name + '<br/>';
+      }
+      
+      if (device.platform) {
+	infoContent += '<b>Platforma</b>: ' + device.platform + '<br/>';
+      }
+
+      if (device.cordova) {
+	infoContent += '<b>Cordova</b>: ' + device.cordova + '<br/>';
+      }
+
+      if (device.uuid) {
+	infoContent += '<b>UUID</b>: ' + device.uuid + '<br/>';
+      }
+
+      if (device.version) {
+	infoContent += '<b>Verze</b>: ' + device.version + '<br/>';
+      }
+
+      if (device.model) {
+	infoContent += '<b>Model</b>: ' + device.model + '<br/>';
+      }
+      
+      updateContent();
+    }
+    
+    function updateContent() {
+      infoContainer.innerHTML = infoContent; 
+    }
+    
+    function getGPS() {
+      if (deviceReady) {
+	var gpsOptions = {
+	  timeout: 5000,
+	  enableHighAccuracy: true
+	};
+	navigator.geolocation.getCurrentPosition(onGPSSuccess, onGPSError, gpsOptions);
+	infoContainer.innerHTML = "Načítám...";
+      } else {
+	alert("Počkejte, dokud nebude zařízení připraveno!");
+      }
+    }
+    
+    function onGPSSuccess(location) {
+      var date = new Date(location.timestamp);
+      infoContent = '';
+      
+      if (location.coords.latitude) {
+	infoContent += '<b>Zeměpisná šířka</b>: ' + location.coords.latitude + '<br/>';
+      }
+      
+      if (location.coords.longitude) {
+	infoContent += '<b>Zeměpisná délka</b>: ' + location.coords.longitude + '<br/>';
+      }
+      
+      if (location.coords.altitude) {
+	infoContent += '<b>Nadmořská výška</b>: ' + location.coords.altitude + '<br/>';
+      }
+      
+      if (location.coords.accuracy) {
+	infoContent += '<b>Přesnost</b>: ' + location.coords.accuracy + '<br/>';
+      }
+      
+      infoContent += '<b>Časová značka</b>: ' + date.toLocaleString();
+      
+      updateContent();
+    }
+    
+    function onGPSError(e) {
+      alert("Chyba: " + e.message);
+    }
+  </script>
+</head>
+<body onload="onLoad()">
+  <h1>PhoneGap aplikace</h1>
+  <hr/>
+  
+  <p>Pro zobrazení aktuální polohy, stiskněte tlačítko.</p>
+  <input type="button" value="Moje poloha?" onclick="getGPS();">
+
+  <hr/>
+  <p id="infoContainer"></p>
+</body>
+</html>
