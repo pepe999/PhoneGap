@@ -19,7 +19,7 @@ http://docs.phonegap.com/getting-started/4-preview-your-app/desktop/
 Nastavení projektu
 ------------------
 
-....
+s nastavením (ikony, informace, permissions,..) pomůže desktopová aplikace ConfiGap:  http://configap.com/ 
  
 
 Vytvoření mobilních instalačních balíčků
